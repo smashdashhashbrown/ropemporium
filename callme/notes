@@ -1,0 +1,44 @@
+1) rabin2 -i callme
+
+    [Imports]
+    nth vaddr      bind   type   lib name
+    ―――――――――――――――――――――――――――――――――――――
+    1   0x004006d0 GLOBAL FUNC       puts
+    2   0x004006e0 GLOBAL FUNC       printf
+    3   0x004006f0 GLOBAL FUNC       callme_three
+    4   0x00400700 GLOBAL FUNC       memset
+    5   0x00400710 GLOBAL FUNC       read
+    6   0x00000000 GLOBAL FUNC       __libc_start_main
+    7   0x00400720 GLOBAL FUNC       callme_one
+    8   0x00000000 WEAK   NOTYPE     __gmon_start__
+    9   0x00400730 GLOBAL FUNC       setvbuf
+    10  0x00400740 GLOBAL FUNC       callme_two
+    11  0x00400750 GLOBAL FUNC       exit
+
+2) objdump -D callme | grep data
+
+    Disassembly of section .rodata:
+    Disassembly of section .data:
+    0000000000601060 <__data_start>:
+
+3) rabin2 -R callme
+
+    [Relocations]
+
+    vaddr      paddr      type   name
+    ―――――――――――――――――――――――――――――――――
+    0x00600ff0 0x00000ff0 SET_64 __libc_start_main
+    0x00600ff8 0x00000ff8 SET_64 __gmon_start__
+    0x00601018 0x00001018 SET_64 puts
+    0x00601020 0x00001020 SET_64 printf
+    0x00601028 0x00001028 SET_64 callme_three
+    0x00601030 0x00001030 SET_64 memset
+    0x00601038 0x00001038 SET_64 read
+    0x00601040 0x00001040 SET_64 callme_one
+    0x00601048 0x00001048 SET_64 setvbuf
+    0x00601050 0x00001050 SET_64 callme_two
+    0x00601058 0x00001058 SET_64 exit
+    0x00601070 0x00601070 SET_64 stdout
+
+
+    12 relocations
