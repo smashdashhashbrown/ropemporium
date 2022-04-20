@@ -1,0 +1,8 @@
+> Bad characters
+
+    'x', 'g', 'a', '.'
+    78   67   61   2E
+
+> ropper --file badchars -b 7867612E --search "mov %"
+> ropper --file badchars -b 7867612E --search "pop %"
+
