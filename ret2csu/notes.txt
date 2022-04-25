@@ -1,0 +1,21 @@
+> rabin2 -i ret2csu 
+
+    [Imports]
+    nth vaddr      bind   type   lib name
+    ―――――――――――――――――――――――――――――――――――――
+    1   0x00400500 GLOBAL FUNC       pwnme
+    2   0x00400510 GLOBAL FUNC       ret2win
+    3   0x00000000 GLOBAL FUNC       __libc_start_main
+    4   0x00000000 WEAK   NOTYPE     __gmon_start__
+
+> rabin2 -R ret2csu
+    
+    [Relocations]
+
+    vaddr      paddr      type   name
+    ―――――――――――――――――――――――――――――――――
+    0x00600ff0 0x00000ff0 SET_64 __libc_start_main
+    0x00600ff8 0x00000ff8 SET_64 __gmon_start__
+    0x00601018 0x00001018 SET_64 pwnme
+    0x00601020 0x00001020 SET_64 ret2win
+

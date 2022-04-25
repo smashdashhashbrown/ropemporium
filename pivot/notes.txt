@@ -1,0 +1,40 @@
+> rabin2 -i pivot 
+
+    [Imports]
+    nth vaddr      bind   type   lib name
+    ―――――――――――――――――――――――――――――――――――――
+    1   0x004006d0 GLOBAL FUNC       free
+    2   0x004006e0 GLOBAL FUNC       puts
+    3   0x004006f0 GLOBAL FUNC       printf
+    4   0x00400700 GLOBAL FUNC       memset
+    5   0x00400710 GLOBAL FUNC       read
+    6   0x00000000 GLOBAL FUNC       __libc_start_main
+    7   0x00000000 WEAK   NOTYPE     __gmon_start__
+    8   0x00400720 GLOBAL FUNC       foothold_function
+    9   0x00400730 GLOBAL FUNC       malloc
+    10  0x00400740 GLOBAL FUNC       setvbuf
+    11  0x00400750 GLOBAL FUNC       exit
+
+> rabin2 -R pivot
+
+     vaddr      paddr      type   name
+    ―――――――――――――――――――――――――――――――――
+    0x00600ff0 0x00000ff0 SET_64 __libc_start_main
+    0x00600ff8 0x00000ff8 SET_64 __gmon_start__
+    0x00601018 0x00001018 SET_64 free
+    0x00601020 0x00001020 SET_64 puts
+    0x00601028 0x00001028 SET_64 printf
+    0x00601030 0x00001030 SET_64 memset
+    0x00601038 0x00001038 SET_64 read
+    0x00601040 0x00001040 SET_64 foothold_function
+    0x00601048 0x00001048 SET_64 malloc
+    0x00601050 0x00001050 SET_64 setvbuf
+    0x00601058 0x00001058 SET_64 exit
+    0x00601070 0x00601070 SET_64 stdout
+
+
+    12 relocations
+
+> nm libpivot.so | grep ret2win
+
+    0000000000000a81 T ret2win
