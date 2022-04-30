@@ -19,3 +19,41 @@
     0x00601018 0x00001018 SET_64 pwnme
     0x00601020 0x00001020 SET_64 ret2win
 
+> 400680 gadget2
+> 40096a gadget2
+
+> nm ret2csu 
+
+    0000000000601038 B __bss_start
+    0000000000601038 b completed.7698
+    0000000000601028 D __data_start
+    0000000000601028 W data_start
+    0000000000400560 t deregister_tm_clones
+    0000000000400550 T _dl_relocate_static_pie
+    00000000004005d0 t __do_global_dtors_aux
+    0000000000600df8 d __do_global_dtors_aux_fini_array_entry
+    0000000000601030 D __dso_handle
+    0000000000600e00 d _DYNAMIC
+    0000000000601038 D _edata
+    0000000000601040 B _end
+    00000000004006b4 T _fini
+    0000000000400600 t frame_dummy
+    0000000000600df0 d __frame_dummy_init_array_entry
+    0000000000400824 r __FRAME_END__
+    0000000000601000 d _GLOBAL_OFFSET_TABLE_
+                    w __gmon_start__
+    00000000004006c4 r __GNU_EH_FRAME_HDR
+    00000000004004d0 T _init
+    0000000000600df8 d __init_array_end
+    0000000000600df0 d __init_array_start
+    00000000004006c0 R _IO_stdin_used
+    00000000004006b0 T __libc_csu_fini
+    0000000000400640 T __libc_csu_init
+                    U __libc_start_main@@GLIBC_2.2.5
+    0000000000400607 T main
+                    U pwnme
+    0000000000400590 t register_tm_clones
+                    U ret2win
+    0000000000400520 T _start
+    0000000000601038 D __TMC_END__
+    0000000000400617 t usefulFunction
