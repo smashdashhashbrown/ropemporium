@@ -1,0 +1,48 @@
+> nm write432 
+
+    0804a020 B __bss_start
+    0804a020 b completed.7283
+    0804a018 D __data_start
+    0804a018 W data_start
+    08048450 t deregister_tm_clones
+    08048430 T _dl_relocate_static_pie
+    080484d0 t __do_global_dtors_aux
+    08049f00 d __do_global_dtors_aux_fini_array_entry
+    0804a01c D __dso_handle
+    08049f04 d _DYNAMIC
+    0804a020 D _edata
+    0804a024 B _end
+    080485b4 T _fini
+    080485c8 R _fp_hw
+    08048500 t frame_dummy
+    08049efc d __frame_dummy_init_array_entry
+    08048730 r __FRAME_END__
+    0804a000 d _GLOBAL_OFFSET_TABLE_
+            w __gmon_start__
+    080485dc r __GNU_EH_FRAME_HDR
+    0804837c T _init
+    08049f00 d __init_array_end
+    08049efc d __init_array_start
+    080485cc R _IO_stdin_used
+    080485b0 T __libc_csu_fini
+    08048550 T __libc_csu_init
+            U __libc_start_main@@GLIBC_2.0
+    08048506 T main
+            U print_file
+            U pwnme
+    08048490 t register_tm_clones
+    080483f0 T _start
+    0804a020 D __TMC_END__
+    0804852a t usefulFunction
+    08048543 t usefulGadgets
+    08048440 T __x86.get_pc_thunk.bx
+
+> rabin2 -i write432 
+
+    [Imports]
+    nth vaddr      bind   type   lib name
+    ―――――――――――――――――――――――――――――――――――――
+    1   0x080483b0 GLOBAL FUNC       pwnme
+    2   0x00000000 WEAK   NOTYPE     __gmon_start__
+    3   0x080483c0 GLOBAL FUNC       __libc_start_main
+    4   0x080483d0 GLOBAL FUNC       print_file

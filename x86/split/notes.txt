@@ -1,0 +1,71 @@
+> rabin2 -i split32 
+
+    [Imports]
+    nth vaddr      bind   type   lib name
+    ―――――――――――――――――――――――――――――――――――――
+    1   0x080483b0 GLOBAL FUNC       read
+    2   0x080483c0 GLOBAL FUNC       printf
+    3   0x080483d0 GLOBAL FUNC       puts
+    4   0x080483e0 GLOBAL FUNC       system
+    5   0x00000000 WEAK   NOTYPE     __gmon_start__
+    6   0x080483f0 GLOBAL FUNC       __libc_start_main
+    7   0x08048400 GLOBAL FUNC       setvbuf
+    8   0x08048410 GLOBAL FUNC       memset
+
+> nm split32 
+
+    0804a042 B __bss_start
+    0804a048 b completed.7283
+    0804a028 D __data_start
+    0804a028 W data_start
+    08048490 t deregister_tm_clones
+    08048470 T _dl_relocate_static_pie
+    08048510 t __do_global_dtors_aux
+    08049f10 d __do_global_dtors_aux_fini_array_entry
+    0804a02c D __dso_handle
+    08049f14 d _DYNAMIC
+    0804a042 D _edata
+    0804a04c B _end
+    08048694 T _fini
+    080486a8 R _fp_hw
+    08048540 t frame_dummy
+    08049f0c d __frame_dummy_init_array_entry
+    08048894 r __FRAME_END__
+    0804a000 d _GLOBAL_OFFSET_TABLE_
+            w __gmon_start__
+    08048718 r __GNU_EH_FRAME_HDR
+    08048374 T _init
+    08049f10 d __init_array_end
+    08049f0c d __init_array_start
+    080486ac R _IO_stdin_used
+    08048690 T __libc_csu_fini
+    08048630 T __libc_csu_init
+            U __libc_start_main@@GLIBC_2.0
+    08048546 T main
+            U memset@@GLIBC_2.0
+            U printf@@GLIBC_2.0
+            U puts@@GLIBC_2.0
+    080485ad t pwnme
+            U read@@GLIBC_2.0
+    080484d0 t register_tm_clones
+            U setvbuf@@GLIBC_2.0
+    08048430 T _start
+    0804a044 B stdout@@GLIBC_2.0
+            U system@@GLIBC_2.0
+    0804a044 D __TMC_END__
+    0804860c t usefulFunction
+    0804a030 D usefulString
+    08048480 T __x86.get_pc_thunk.bx
+
+> rabin2 -z split32
+
+    [Strings]
+    nth paddr      vaddr      len size section type  string
+    ―――――――――――――――――――――――――――――――――――――――――――――――――――――――
+    0   0x000006b0 0x080486b0 21  22   .rodata ascii split by ROP Emporium
+    1   0x000006c6 0x080486c6 4   5    .rodata ascii x86\n
+    2   0x000006cb 0x080486cb 8   9    .rodata ascii \nExiting
+    3   0x000006d4 0x080486d4 43  44   .rodata ascii Contriving a reason to ask user for data...
+    4   0x00000703 0x08048703 10  11   .rodata ascii Thank you!
+    5   0x0000070e 0x0804870e 7   8    .rodata ascii /bin/ls
+    0   0x00001030 0x0804a030 17  18   .data   ascii /bin/cat flag.txt

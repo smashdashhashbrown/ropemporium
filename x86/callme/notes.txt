@@ -1,0 +1,17 @@
+> rabin2 -i callme32 
+
+    [Imports]
+    nth vaddr      bind   type   lib name
+    ―――――――――――――――――――――――――――――――――――――
+    1   0x080484c0 GLOBAL FUNC       read
+    2   0x080484d0 GLOBAL FUNC       printf
+    3   0x080484e0 GLOBAL FUNC       callme_three
+    4   0x080484f0 GLOBAL FUNC       callme_one
+    5   0x08048500 GLOBAL FUNC       puts
+    6   0x00000000 WEAK   NOTYPE     __gmon_start__
+    7   0x08048510 GLOBAL FUNC       exit
+    8   0x08048520 GLOBAL FUNC       __libc_start_main
+    9   0x08048530 GLOBAL FUNC       setvbuf
+    10  0x08048540 GLOBAL FUNC       memset
+    11  0x08048550 GLOBAL FUNC       callme_two
+

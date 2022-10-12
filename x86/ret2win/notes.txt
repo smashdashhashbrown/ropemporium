@@ -1,0 +1,57 @@
+> nm ret2win32 
+
+    0804a030 B __bss_start
+    0804a034 b completed.7283
+    0804a028 D __data_start
+    0804a028 W data_start
+    08048490 t deregister_tm_clones
+    08048470 T _dl_relocate_static_pie
+    08048510 t __do_global_dtors_aux
+    08049f10 d __do_global_dtors_aux_fini_array_entry
+    0804a02c D __dso_handle
+    08049f14 d _DYNAMIC
+    0804a030 D _edata
+    0804a038 B _end
+    080486c4 T _fini
+    080486d8 R _fp_hw
+    08048540 t frame_dummy
+    08049f0c d __frame_dummy_init_array_entry
+    080489a4 r __FRAME_END__
+    0804a000 d _GLOBAL_OFFSET_TABLE_
+            w __gmon_start__
+    08048828 r __GNU_EH_FRAME_HDR
+    08048374 T _init
+    08049f10 d __init_array_end
+    08049f0c d __init_array_start
+    080486dc R _IO_stdin_used
+    080486c0 T __libc_csu_fini
+    08048660 T __libc_csu_init
+            U __libc_start_main@@GLIBC_2.0
+    08048546 T main
+            U memset@@GLIBC_2.0
+            U printf@@GLIBC_2.0
+            U puts@@GLIBC_2.0
+    080485ad t pwnme
+            U read@@GLIBC_2.0
+    080484d0 t register_tm_clones
+    0804862c t ret2win
+            U setvbuf@@GLIBC_2.0
+    08048430 T _start
+    0804a030 B stdout@@GLIBC_2.0
+            U system@@GLIBC_2.0
+    0804a030 D __TMC_END__
+    08048480 T __x86.get_pc_thunk.bx
+
+> rabin2 -i ret2win32 
+
+    [Imports]
+    nth vaddr      bind   type   lib name
+    ―――――――――――――――――――――――――――――――――――――
+    1   0x080483b0 GLOBAL FUNC       read
+    2   0x080483c0 GLOBAL FUNC       printf
+    3   0x080483d0 GLOBAL FUNC       puts
+    4   0x080483e0 GLOBAL FUNC       system
+    5   0x00000000 WEAK   NOTYPE     __gmon_start__
+    6   0x080483f0 GLOBAL FUNC       __libc_start_main
+    7   0x08048400 GLOBAL FUNC       setvbuf
+    8   0x08048410 GLOBAL FUNC       memset
